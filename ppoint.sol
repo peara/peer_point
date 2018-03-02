@@ -83,13 +83,21 @@ contract PeerPoint is ERC20Interface {
         return balances[tokenOwner];
     }
 
+    modifier updatePoints {
+        // have not been updated recently
+        if (now >= next_redeemable_times[msg.sender]) {
+            redeem();
+        }
+        _;
+    }
+
     // Get the spendable point for account `tokenOwner`
     function pointOf(address tokenOwner) public constant returns (uint point) {
         return points[tokenOwner];
     }
 
     // Transfer the balance from owner's account to another account
-    function transfer(address to, uint tokens) public returns (bool success) {
+    function transfer(address to, uint tokens) public updatePoints returns (bool success) {
         points[msg.sender] = points[msg.sender].sub(tokens);
         balances[to] = balances[to].add(tokens);
         Transfer(msg.sender, to, tokens);
@@ -102,7 +110,7 @@ contract PeerPoint is ERC20Interface {
     // fees in sub-currencies; the command should fail unless the _from account has
     // deliberately authorized the sender of the message via some mechanism; we propose
     // these standardized APIs for approval:
-    function transferFrom(address from, address to, uint tokens) public returns (bool success) {
+    function transferFrom(address from, address to, uint tokens) public updatePoints returns (bool success) {
         points[from] = points[from].sub(tokens);
         allowed[from][msg.sender] = allowed[from][msg.sender].sub(tokens);
         balances[to] = balances[to].add(tokens);
@@ -112,7 +120,7 @@ contract PeerPoint is ERC20Interface {
 
     // Allow `spender` to withdraw from your account, multiple times, up to the `tokens` amount.
     // If this function is called again it overwrites the current allowance with _value.
-    function approve(address spender, uint tokens) public returns (bool success) {
+    function approve(address spender, uint tokens) public updatePoints returns (bool success) {
         allowed[msg.sender][spender] = tokens;
         Approval(msg.sender, spender, tokens);
         return true;
@@ -129,7 +137,7 @@ contract PeerPoint is ERC20Interface {
         address tokenOwner = msg.sender;
         // If block timestamp is larger than next redeemable time
         if (now >= next_redeemable_times[tokenOwner] ) {
-            points[tokenOwner] = points[tokenOwner].add(redeemable_amount);
+            points[tokenOwner] = redeemable_amount;
             // next redeemable time is beginning of next day
             next_redeemable_times[tokenOwner] = now.sub(now % (1 days)).add(1 days);
         }
