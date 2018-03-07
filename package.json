@@ -1,0 +1,24 @@
+{
+  "name": "peer_point",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "express": "^4.16.2",
+    "web3": "^1.0.0-beta.30"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/peara/peer_point.git"
+  },
+  "author": "peara",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/peara/peer_point/issues"
+  },
+  "homepage": "https://github.com/peara/peer_point#readme"
+}
