@@ -52,9 +52,6 @@ contract PeerPoint is ERC20Interface {
     // Next redeemable time for each account
     mapping(address => uint256) next_redeemable_times;
 
-    // Owner of account approves the transfer of an amount to another account
-    mapping(address => mapping (address => uint256)) allowed;
-
     // Amount of redeemable token each time
     uint256 redeemable_amount;
 
@@ -104,32 +101,16 @@ contract PeerPoint is ERC20Interface {
         return true;
     }
 
-    // Send `tokens` amount of tokens from address `from` to address `to`
-    // The transferFrom method is used for a withdraw workflow, allowing contracts to send
-    // tokens on your behalf, for example to "deposit" to a contract address and/or to charge
-    // fees in sub-currencies; the command should fail unless the _from account has
-    // deliberately authorized the sender of the message via some mechanism; we propose
-    // these standardized APIs for approval:
     function transferFrom(address from, address to, uint tokens) public updatePoints returns (bool success) {
-        points[from] = points[from].sub(tokens);
-        allowed[from][msg.sender] = allowed[from][msg.sender].sub(tokens);
-        balances[to] = balances[to].add(tokens);
-        Transfer(from, to, tokens);
-        return true;
+        return false;
     }
 
-    // Allow `spender` to withdraw from your account, multiple times, up to the `tokens` amount.
-    // If this function is called again it overwrites the current allowance with _value.
     function approve(address spender, uint tokens) public updatePoints returns (bool success) {
-        allowed[msg.sender][spender] = tokens;
-        Approval(msg.sender, spender, tokens);
-        return true;
+        return false;
     }
 
-    // Returns the amount of tokens approved by the owner that can be
-    // transferred to the spender's account
     function allowance(address tokenOwner, address spender) public constant returns (uint remaining) {
-        return allowed[tokenOwner][spender];
+        return 0;
     }
 
     // Allow an address to redeem token if
