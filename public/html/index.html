@@ -5,22 +5,32 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta http-equiv="x-ua-compatible" content="ie=edge">
-  <link rel="stylesheet" href="/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
   <link rel="stylesheet" href="/css/common.css">
 </head>
-<body class="text-center">
+<body class="">
   <div class="container">
     <div class="row">
-      <form class="font-weight-bold">
-        <label>Address</label>
-        <p id="address-label" class=""></p>
-        <label>Balance</label>
-        <p id="balance-label" class=""></p>
-        <label>Point received</label>
-        <p id="rec-point-label" class=""></p>
-        <label>Available point to send</label>
-        <p id="send-point-label" class=""></p>
-      </form>
+      <table class="table table-bordered table-striped table-dark">
+        <tbody>
+          <tr>
+            <th scope="row">Address</th>
+            <td id="address-label" class=""></td>
+          </tr>
+          <tr>
+            <th scope="row">Balance</th>
+            <td id="balance-label" class=""></td>
+          </tr>
+          <tr>
+            <th scope="row">Point received</th>
+            <td id="rec-point-label" class=""></td>
+          </tr>
+          <tr>
+            <th scope="row">Available point to send</th>
+            <td id="send-point-label" class=""></td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </body>
