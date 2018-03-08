@@ -7,6 +7,7 @@ window.addEventListener('load', function() {
     var provider = web3.currentProvider
     setInfo();
     $("#redeem-btn").click(handleRedeem)
+    $("#send-btn").click(handleSend)
   } else {
     console.log('No web3? You should consider trying MetaMask!')
     if (window.location.pathname !== '/sign-in') {
@@ -57,4 +58,19 @@ function handleRedeem() {
     }
   })
   $("#redeem-btn").prop("disabled", false)
+}
+
+function handleSend() {
+  $("#send-btn").prop("disabled", true)
+  ppContract.transfer(
+    $("#address-input").val(), $("#amount-input").val(),
+    {value: 0, gas: 200000, gasPrice: web3.toWei(0.1, "Gwei")},
+    (err, res) => {
+      if (!err) {
+        console.log(res)
+      } else {
+        console.log(err)
+      }
+  })
+  $("#send-btn").prop("disabled", false)
 }
