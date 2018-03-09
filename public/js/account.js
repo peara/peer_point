@@ -82,7 +82,7 @@ function updateInfo() {
   web3js.eth.getBlockNumber((err, blockNumber) => {
     if (!err) {
       ppContract.Transfer(
-        { to: "0x00fe622a9aacf4566008ca741f73f5a2188fd726" },
+        { to: baseAddress },
         { fromBlock: 0 }).get((err, res) => {
           html = ""
           for (let [index, event] of res.entries()) {
@@ -97,7 +97,7 @@ function updateInfo() {
         })
 
       ppContract.Transfer(
-        { from: "0x00fe622a9aacf4566008ca741f73f5a2188fd726" },
+        { from: baseAddress },
         { fromBlock: 0 }).get((err, res) => {
           html = ""
           for (let [index, event] of res.entries()) {
