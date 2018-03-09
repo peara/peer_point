@@ -34,7 +34,7 @@
       </table>
     </div>
     <br>
-    <h4 class="row">Send point:</h4>
+    <h4 class="row">Send point</h4>
     <div class="row">
       <div class="col-md8">
         <label>Address</label>
@@ -49,9 +49,54 @@
     <div class="row">
       <button id="send-btn" class="btn btn-secondary">Send</button>
     </div>
+    <br>
+    <h4 class="row">Transactions</h4>
+    <ul class="nav nav-tabs" id="transactions-tab" role="tablist">
+      <li class="nav-item">
+        <a class="nav-link active" id="receive-tab" data-toggle="tab" href="#receive" role="tab" aria-controls="receive" aria-selected="false">Receive</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" id="send-tab" data-toggle="tab" href="#send" role="tab" aria-controls="send" aria-selected="true">Send</a>
+      </li>
+    </ul>
+    <div class="tab-content" id="transaction-content">
+      <div class="tab-pane fade show active" id="receive" role="tabpanel" aria-labelledby="receive-tab">
+        <table class="table">
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">From</th>
+            <th scope="col">Amount</th>
+            <th scope="col">No. Confirmations</th>
+          </tr>
+          <tbody id="receive-body">
+            <tr>
+              <th scope="row">1</th>
+              <td id="address-label" class=""></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="tab-pane fade" id="send" role="tabpanel" aria-labelledby="send-tab">
+        <table class="table">
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">To</th>
+            <th scope="col">Amount</th>
+            <th scope="col">No. Confirmations</th>
+          </tr>
+          <tbody id="send-body">
+            <tr>
+              <th scope="row">1</th>
+              <td id="address-label" class=""></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 </body>
 <script src="js/jquery-3.3.1.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
 <script src="js/account.js"></script>
 </html>
 
