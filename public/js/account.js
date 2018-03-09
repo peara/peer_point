@@ -88,7 +88,7 @@ function updateInfo() {
           for (let [index, event] of res.entries()) {
             html += "<tr>"
             html += "<th>" + (index + 1) + "</th>"
-            html += "<td>" + event.args.to + "</td>"
+            html += "<td>" + event.args.from + "</td>"
             html += "<td>" + event.args.tokens.toString() + "</td>"
             html += "<td>" + (blockNumber - event.blockNumber) + "</td>"
             html += "</tr>"
