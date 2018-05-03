@@ -1,14 +1,17 @@
 .text-center {
-    text-align: center!important;
+  text-align: center !important;
 }
+
 form {
-    display: block;
-    margin-top: 0em;
+  display: block;
+  margin-top: 0em;
 }
+
 html,
 body {
   height: auto;
 }
+
 body {
   display: -ms-flexbox;
   display: -webkit-box;

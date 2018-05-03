@@ -109,7 +109,7 @@ contract PeerPoint is ERC20Interface {
         return false;
     }
 
-    function allowance(address tokenOwner, address spender) public constant returns (uint remaining) {
+    function allowance(address tokenOwner, address spender) public view returns (uint remaining) {
         return 0;
     }
 
