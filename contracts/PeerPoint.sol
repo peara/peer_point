@@ -7,11 +7,11 @@ contract ERC20Interface {
     function totalSupply() public constant returns (uint);
     function balanceOf(address tokenOwner) public constant returns (uint balance);
     function allowance(address tokenOwner, address spender) public constant returns (uint remaining);
-    function transfer(address to, uint tokens) public returns (bool success);
+    function transfer(address to, uint tokens, bytes32 message) public returns (bool success);
     function approve(address spender, uint tokens) public returns (bool success);
     function transferFrom(address from, address to, uint tokens) public returns (bool success);
 
-    event Transfer(address indexed from, address indexed to, uint tokens);
+    event Transfer(address indexed from, address indexed to, uint tokens, bytes32 message);
     event Approval(address indexed tokenOwner, address indexed spender, uint tokens);
 }
 
@@ -94,10 +94,10 @@ contract PeerPoint is ERC20Interface {
     }
 
     // Transfer the balance from owner's account to another account
-    function transfer(address to, uint tokens) public updatePoints returns (bool success) {
+    function transfer(address to, uint tokens, bytes32 message) public updatePoints returns (bool success) {
         points[msg.sender] = points[msg.sender].sub(tokens);
         balances[to] = balances[to].add(tokens);
-        Transfer(msg.sender, to, tokens);
+        Transfer(msg.sender, to, tokens, message);
         return true;
     }
 
@@ -109,7 +109,7 @@ contract PeerPoint is ERC20Interface {
         return false;
     }
 
-    function allowance(address tokenOwner, address spender) public constant returns (uint remaining) {
+    function allowance(address tokenOwner, address spender) public view returns (uint remaining) {
         return 0;
     }
 
