@@ -1,6 +1,6 @@
 <template>
   <v-flex text-xs-center>
-    <p v-if="isInjected" id="has-metamask"><v-icon color="green">check_circle</v-icon> Metamask installed</p>
+    <p v-if="isInjected" id="has-metamask"><v-icon color="green">check_circle</v-icon> Metamask installed. Your address is {{ coinbase }}</p>
     <p v-else id="no-metamask"><v-icon color="orange">warning</v-icon> Metamask not found. Please download at <a href="https://metamask.io/">https://metamask.io/</a></p>
     <h1>Point received: {{ received }}</h1>
     <h2>Available point to send: {{ available }}</h2>
@@ -92,7 +92,7 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-h1, h2 {
+h1, h2, h3 {
   font-weight: normal;
 }
 ul {

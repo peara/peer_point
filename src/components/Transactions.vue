@@ -22,6 +22,9 @@
             <td>{{ props.item.amount }}</td>
             <td>{{ props.item.message }}</td>
             <td>{{ props.item.block }}</td>
+            <td>
+              <a target="_blank" :href="createEtherscanUrl(props.item.txhash)"><v-icon>link</v-icon></a>
+            </td>
           </template>
         </v-data-table>
       </v-tab-item>
@@ -37,6 +40,9 @@
               <td>{{ props.item.amount }}</td>
               <td>{{ props.item.message }}</td>
               <td>{{ props.item.block }}</td>
+              <td>
+                <a target="_blank" :href="createEtherscanUrl(props.item.txhash)"><v-icon>link</v-icon></a>
+              </td>
             </template>
           </v-data-table>
       </v-tab-item>
@@ -46,6 +52,7 @@
 
 <script>
   import {mapState} from 'vuex'
+  import {ETHERSCAN_URLS} from '../util/constants/networks'
 
   export default {
     data: () => ({
@@ -58,7 +65,8 @@
         },
         { text: 'Amount', value: 'amount' },
         { text: 'Message', value: 'message' },
-        { text: 'Block Number', value: 'block' }
+        { text: 'Block Number', value: 'block' },
+        { text: 'Link', value: 'txhash' }
       ],
       receivedHeaders: [
         {
@@ -69,7 +77,8 @@
         },
         { text: 'Amount', value: 'amount' },
         { text: 'Message', value: 'message' },
-        { text: 'Block Number', value: 'block' }
+        { text: 'Block Number', value: 'block' },
+        { text: 'Link', value: 'txhash' }
       ]
     }),
     computed: mapState({
@@ -80,6 +89,11 @@
       sentTransactions: state => state.transactions.sent,
       receivedTransactions: state => state.transactions.received
     }),
+    methods: {
+      createEtherscanUrl: function (txhash) {
+        return `${ETHERSCAN_URLS[this.$store.state.web3.networkId]}${txhash}`
+      }
+    },
     mounted () {
       this.$store.dispatch('getContractInstance')
     }

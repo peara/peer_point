@@ -20,7 +20,8 @@ let pollTransactions = function (state) {
                 from: event.args.from,
                 amount: event.args.tokens.valueOf(),
                 message: web3.toAscii(event.args.message),
-                block: event.blockNumber
+                block: event.blockNumber,
+                txhash: event.transactionHash
               })
             }
             resolve(newReceived)
@@ -43,7 +44,8 @@ let pollTransactions = function (state) {
                 to: event.args.to,
                 amount: event.args.tokens.valueOf(),
                 message: web3.toAscii(event.args.message),
-                block: event.blockNumber
+                block: event.blockNumber,
+                txhash: event.transactionHash
               })
             }
             resolve(newSent)
