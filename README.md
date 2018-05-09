@@ -7,6 +7,12 @@
 ## Build Setup
 
 ``` bash
+# compile contracts
+truffle compile
+
+# migrate compiled contracts to a network
+truffle migrate --network your_net_work_here
+
 # install dependencies
 npm install
 
