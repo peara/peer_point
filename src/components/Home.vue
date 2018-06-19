@@ -57,7 +57,7 @@
     methods: {
       submit () {
         let self = this
-        this.$store.state.contractInstance().sentPoint(
+        this.$store.state.contractInstance().sendPoint(
           self.toAddress, self.amount, self.message, {
             value: 0,
             gas: 300000,

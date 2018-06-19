@@ -97,7 +97,7 @@ contract PeerPoint is ERC20Interface {
         return points[_owner];
     }
 
-    function sentPoint(address _to, uint256 _value, bytes32 _message)
+    function sendPoint(address _to, uint256 _value, bytes32 _message)
         public
         updatePoints
         returns (bool success)
