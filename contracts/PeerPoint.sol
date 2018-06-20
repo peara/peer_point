@@ -1,47 +1,51 @@
-pragma solidity ^0.4.20;
+pragma solidity ^0.4.23;
+
+
 // ----------------------------------------------------------------------------
 // ERC Token Standard #20 Interface
-// https://github.com/ethereum/EIPs/blob/master/EIPS/eip-20-token-standard.md
+// https://github.com/ethereum/EIPs/blob/master/EIPS/eip-20.md
 // ----------------------------------------------------------------------------
 contract ERC20Interface {
-    function totalSupply() public constant returns (uint);
-    function balanceOf(address tokenOwner) public constant returns (uint balance);
-    function allowance(address tokenOwner, address spender) public constant returns (uint remaining);
-    function transfer(address to, uint tokens, bytes32 message) public returns (bool success);
-    function approve(address spender, uint tokens) public returns (bool success);
-    function transferFrom(address from, address to, uint tokens) public returns (bool success);
+    function totalSupply() public view returns (uint256 totalSupply_);
+    function balanceOf(address _owner) public view returns (uint256 balance);
+    function transfer(address _to, uint256 _value) public returns (bool success);
+    function transferFrom(address _from, address _to, uint256 _value) public returns (bool success);
+    function approve(address _spender, uint256 _value) public returns (bool success);
+    function allowance(address _owner, address _spender) public view returns (uint256 remaining);
 
-    event Transfer(address indexed from, address indexed to, uint tokens, bytes32 message);
-    event Approval(address indexed tokenOwner, address indexed spender, uint tokens);
+    event Transfer(address indexed _from, address indexed _to, uint256 _value);
+    event Approval(address indexed _owner, address indexed _spender, uint256 _value);
 }
+
 
 // ----------------------------------------------------------------------------
 // Safe maths
 // ----------------------------------------------------------------------------
 library SafeMath {
-    function add(uint a, uint b) internal pure returns (uint c) {
+    function add(uint256 a, uint256 b) internal pure returns (uint256 c) {
         c = a + b;
         require(c >= a);
     }
-    function sub(uint a, uint b) internal pure returns (uint c) {
+    function sub(uint256 a, uint256 b) internal pure returns (uint256 c) {
         require(b <= a);
         c = a - b;
     }
-    function mul(uint a, uint b) internal pure returns (uint c) {
+    function mul(uint256 a, uint256 b) internal pure returns (uint256 c) {
         c = a * b;
         require(a == 0 || c / a == b);
     }
-    function div(uint a, uint b) internal pure returns (uint c) {
+    function div(uint256 a, uint256 b) internal pure returns (uint256 c) {
         require(b > 0);
         c = a / b;
     }
 }
 
+
 // ----------------------------------------------------------------------------
 // Unipos
 // ----------------------------------------------------------------------------
 contract PeerPoint is ERC20Interface {
-    using SafeMath for uint;
+    using SafeMath for uint256;
 
     // Balances for each account
     mapping(address => uint256) balances;
@@ -50,85 +54,108 @@ contract PeerPoint is ERC20Interface {
     mapping(address => uint256) points;
 
     // Next redeemable time for each account
-    mapping(address => uint256) next_redeemable_times;
+    mapping(address => uint256) nextRedeemableTimes;
 
     // Amount of redeemable token each time
-    uint256 redeemable_amount;
+    uint256 redeemableAmount;
 
     // Contract owner
     address owner;
 
     string public symbol;
-    string public  name;
+    string public name;
 
-    function PeerPoint() public {
+    event SentPoint(address indexed _from, address indexed _to, uint256 _value, bytes32 _message);
+
+    constructor () public {
         symbol = "PBP";
         name = "Peer Bonus Point";
-        redeemable_amount = 400;
+        redeemableAmount = 400;
         owner = msg.sender;
     }
 
     // ------------------------------------------------------------------------
     // Total supply - just to fulfill erc20 interface
     // ------------------------------------------------------------------------
-    function totalSupply() public constant returns (uint) {
-        return 1;
-    }
+    function totalSupply() public view returns (uint256) {}
 
-    // Get the token balance for account `tokenOwner`
-    function balanceOf(address tokenOwner) public constant returns (uint balance) {
-        return balances[tokenOwner];
+    // Get the token balance for account `_owner`
+    function balanceOf(address _owner) public view returns (uint256) {
+        return balances[_owner];
     }
 
     modifier updatePoints {
         // have not been updated recently
-        if (now >= next_redeemable_times[msg.sender]) {
+        if (now >= nextRedeemableTimes[msg.sender]) {
             redeem();
         }
         _;
     }
 
-    // Get the spendable point for account `tokenOwner`
-    function pointOf(address tokenOwner) public constant returns (uint point) {
-        return points[tokenOwner];
+    // Get the spendable point for account `_owner`
+    function pointOf(address _owner) public view returns (uint256) {
+        if (now > nextRedeemableTimes[msg.sender]) {
+            return redeemableAmount;
+        }
+        return points[_owner];
     }
 
-    // Transfer the balance from owner's account to another account
-    function transfer(address to, uint tokens, bytes32 message) public updatePoints returns (bool success) {
-        points[msg.sender] = points[msg.sender].sub(tokens);
-        balances[to] = balances[to].add(tokens);
-        Transfer(msg.sender, to, tokens, message);
+    function sendPoint(address _to, uint256 _value, bytes32 _message)
+        public
+        updatePoints
+        returns (bool success)
+    {
+        require(_to != address(0));
+        require(_to != msg.sender);
+        require(_value <= points[msg.sender]);
+        points[msg.sender] = points[msg.sender].sub(_value);
+        balances[_to] = balances[_to].add(_value);
+        emit SentPoint(msg.sender, _to, _value, _message);
         return true;
     }
 
-    function transferFrom(address from, address to, uint tokens) public updatePoints returns (bool success) {
+    // Transfer the balance from owner's account to another account
+    function transfer(address _to, uint256 _value) public returns (bool success) {
+        _to;
+        _value;
         return false;
     }
 
-    function approve(address spender, uint tokens) public updatePoints returns (bool success) {
+    function transferFrom(address _from, address _to, uint256 _value) public returns (bool success) {
+        _from;
+        _to;
+        _value;
         return false;
     }
 
-    function allowance(address tokenOwner, address spender) public view returns (uint remaining) {
+    function approve(address _spender, uint256 _value) public returns (bool success) {
+        _spender;
+        _value;
+        return false;
+    }
+    function allowance(address _owner, address _spender) public view returns (uint256 remaining) {
+        _owner;
+        _spender;
         return 0;
     }
 
+
     // Allow an address to redeem token if
-    function redeem() public returns (uint point, uint next_redeemable_time) {
-        address tokenOwner = msg.sender;
+    function redeem() public returns (uint256 point, uint256 nextRedeemableTime) {
+        address _owner = msg.sender;
         // If block timestamp is larger than next redeemable time
-        if (now >= next_redeemable_times[tokenOwner] ) {
-            points[tokenOwner] = redeemable_amount;
-            // next redeemable time is beginning of next day
-            next_redeemable_times[tokenOwner] = now.sub(now % (1 days)).add(1 days);
+        if (now >= nextRedeemableTimes[_owner] ) {
+            points[_owner] = redeemableAmount;
+
+            nextRedeemableTimes[_owner] = now.sub(now % (1 days)).add(1 days);
         }
 
-        return (points[tokenOwner], next_redeemable_times[tokenOwner]);
+        return (points[_owner], nextRedeemableTimes[_owner]);
     }
 
     // Reset next redeemable time of an address, only callable by contract's owner
-    function resetTime(address tokenOwner) public {
+    function resetTime(address _owner) public {
         require(msg.sender == owner);
-        next_redeemable_times[tokenOwner] = 0;
+        nextRedeemableTimes[_owner] = 0;
     }
 }

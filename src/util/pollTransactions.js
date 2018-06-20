@@ -8,7 +8,7 @@ let pollTransactions = function (state) {
   setInterval(() => {
     if (web3 && store.state.web3.web3Instance && store.state.refetch) {
       let receivedPromise = new Promise(function (resolve, reject) {
-        store.state.contractInstance().Transfer({
+        store.state.contractInstance().SentPoint({
           to: store.state.web3.coinbase
         }, {
           fromBlock: 0
@@ -32,7 +32,7 @@ let pollTransactions = function (state) {
       })
 
       let sentPromise = new Promise(function (resolve, reject) {
-        store.state.contractInstance().Transfer({
+        store.state.contractInstance().SentPoint({
           from: store.state.web3.coinbase
         }, {
           fromBlock: 0
