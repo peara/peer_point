@@ -108,9 +108,6 @@ contract PeerPoint is ERC20Interface {
         require(_to != address(0));
         require(_to != msg.sender);
         require(_value <= points[msg.sender]);
-        if (now > nextRedeemableTimes[msg.sender]) {
-            points[msg.sender] = redeemableAmount;
-        }
         points[msg.sender] = points[msg.sender].sub(_value);
         balances[_to] = balances[_to].add(_value);
         emit SentPoint(msg.sender, _to, _value, _message);
