@@ -9,7 +9,7 @@ let pollTransactions = function (state) {
     if (web3 && store.state.web3.web3Instance && store.state.refetch) {
       let receivedPromise = new Promise(function (resolve, reject) {
         store.state.contractInstance().SentPoint({
-          to: store.state.web3.coinbase
+          _to: store.state.web3.coinbase
         }, {
           fromBlock: 0
         }).get((err, res) => {
@@ -17,9 +17,9 @@ let pollTransactions = function (state) {
           if (!err) {
             for (let [, event] of res.entries()) {
               newReceived.push({
-                from: event.args.from,
-                amount: event.args.tokens.valueOf(),
-                message: web3.toAscii(event.args.message),
+                from: event.args._from,
+                amount: event.args._value.toNumber(),
+                message: web3.toAscii(event.args._message),
                 block: event.blockNumber,
                 txhash: event.transactionHash
               })
@@ -33,7 +33,7 @@ let pollTransactions = function (state) {
 
       let sentPromise = new Promise(function (resolve, reject) {
         store.state.contractInstance().SentPoint({
-          from: store.state.web3.coinbase
+          _from: store.state.web3.coinbase
         }, {
           fromBlock: 0
         }).get((err, res) => {
@@ -41,9 +41,9 @@ let pollTransactions = function (state) {
             let newSent = []
             for (let [, event] of res.entries()) {
               newSent.push({
-                to: event.args.to,
-                amount: event.args.tokens.valueOf(),
-                message: web3.toAscii(event.args.message),
+                to: event.args._to,
+                amount: event.args._value.toNumber(),
+                message: web3.toAscii(event.args._message),
                 block: event.blockNumber,
                 txhash: event.transactionHash
               })
@@ -62,7 +62,7 @@ let pollTransactions = function (state) {
         })
       })
     }
-  }, 5000)
+  }, 1000)
 }
 
 export default pollTransactions
